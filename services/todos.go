@@ -12,10 +12,9 @@ import (
 	"github.com/bmdavis419/go-backend-template/database"
 	"github.com/bmdavis419/go-backend-template/dtos"
 	"github.com/bmdavis419/go-backend-template/models"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func CreateTodo(ctx context.Context, data *dtos.CreateTodo) (primitive.ObjectID, error) {
+func CreateTodo(ctx context.Context, data *dtos.CreateTodo) (string, error) {
 	return database.CreateTodo(ctx, data)
 }
 
@@ -23,14 +22,14 @@ func GetAllTodos(ctx context.Context) (*[]models.Todo, error) {
 	return database.GetAllTodos(ctx)
 }
 
-func GetTodoById(ctx context.Context, id primitive.ObjectID) (*models.Todo, error) {
+func GetTodoById(ctx context.Context, id string) (*models.Todo, error) {
 	return database.GetTodoById(ctx, id)
 }
 
-func UpdateTodo(ctx context.Context, id primitive.ObjectID, data *dtos.UpdateTodo) (int64, error) {
+func UpdateTodo(ctx context.Context, id string, data *dtos.UpdateTodo) error {
 	return database.UpdateTodo(ctx, id, data)
 }
 
-func DeleteTodo(ctx context.Context, id primitive.ObjectID) (int64, error) {
+func DeleteTodo(ctx context.Context, id string) error {
 	return database.DeleteTodo(ctx, id)
 }

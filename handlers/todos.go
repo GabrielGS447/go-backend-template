@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"github.com/bmdavis419/go-backend-template/dtos"
+	"github.com/bmdavis419/go-backend-template/errs"
 	"github.com/bmdavis419/go-backend-template/services"
 	"github.com/gofiber/fiber/v2"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // @Summary Create a todo.
@@ -24,7 +24,7 @@ func CreateTodo(c *fiber.Ctx) error {
 
 	insertedId, err := services.CreateTodo(c.Context(), nTodo)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"internal server error": err.Error()})
+		return handleTodoError(c, err)
 	}
 
 	return c.Status(200).JSON(fiber.Map{"todo_id": insertedId})
@@ -40,7 +40,7 @@ func CreateTodo(c *fiber.Ctx) error {
 func GetAllTodos(c *fiber.Ctx) error {
 	todos, err := services.GetAllTodos(c.Context())
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"internal server error": err.Error()})
+		return handleTodoError(c, err)
 	}
 
 	return c.Status(200).JSON(todos)
@@ -54,15 +54,11 @@ func GetAllTodos(c *fiber.Ctx) error {
 // @Success 200 {object} models.Todo
 // @Router /todos/:id [get]
 func GetTodoById(c *fiber.Ctx) error {
-	id := c.Locals("id").(primitive.ObjectID) // id is parsed by middleware
+	id := c.Params("id")
 
 	todo, err := services.GetTodoById(c.Context(), id)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"internal server error": err.Error()})
-	}
-
-	if todo == nil {
-		return c.Status(404).JSON(fiber.Map{"error": "todo not found"})
+		return handleTodoError(c, err)
 	}
 
 	return c.Status(200).JSON(todo)
@@ -78,7 +74,7 @@ func GetTodoById(c *fiber.Ctx) error {
 // @Success 200 {object} dtos.UpdateTodoRes
 // @Router /todos/:id [put]
 func UpdateTodo(c *fiber.Ctx) error {
-	id := c.Locals("id").(primitive.ObjectID) // id is parsed by middleware
+	id := c.Params("id")
 
 	uTodo := new(dtos.UpdateTodo)
 
@@ -86,13 +82,9 @@ func UpdateTodo(c *fiber.Ctx) error {
 		return c.Status(400).JSON(fiber.Map{"bad input": err.Error()})
 	}
 
-	modifiedCount, err := services.UpdateTodo(c.Context(), id, uTodo)
+	err := services.UpdateTodo(c.Context(), id, uTodo)
 	if err != nil {
-		c.Status(500).JSON(fiber.Map{"internal server error": err.Error()})
-	}
-
-	if modifiedCount == 0 {
-		return c.Status(404).JSON(fiber.Map{"error": "todo not found"})
+		return handleTodoError(c, err)
 	}
 
 	return c.Status(200).JSON(fiber.Map{"message": "todo updated"})
@@ -106,16 +98,21 @@ func UpdateTodo(c *fiber.Ctx) error {
 // @Success 200 {object} dtos.DeleteTodoRes
 // @Router /todos/:id [delete]
 func DeleteTodo(c *fiber.Ctx) error {
-	dbId := c.Locals("id").(primitive.ObjectID) // id is parsed by middleware
+	id := c.Params("id")
 
-	deletedCount, err := services.DeleteTodo(c.Context(), dbId)
+	err := services.DeleteTodo(c.Context(), id)
 	if err != nil {
-		return c.Status(500).JSON(fiber.Map{"internal server error": err.Error()})
-	}
-
-	if deletedCount == 0 {
-		return c.Status(404).JSON(fiber.Map{"error": "todo not found"})
+		return handleTodoError(c, err)
 	}
 
 	return c.Status(200).JSON(fiber.Map{"message": "todo deleted"})
+}
+
+func handleTodoError(c *fiber.Ctx, err error) error {
+	switch err {
+	case errs.ErrTodoNotFound:
+		return c.Status(404).JSON(fiber.Map{"message": err.Error()})
+	default:
+		return c.Status(500).JSON(fiber.Map{"message": err.Error()})
+	}
 }
