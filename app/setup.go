@@ -1,27 +1,25 @@
 package app
 
 import (
-	"os"
-
-	"github.com/bmdavis419/the-better-backend/config"
-	"github.com/bmdavis419/the-better-backend/database"
-	"github.com/bmdavis419/the-better-backend/router"
+	"github.com/bmdavis419/go-backend-template/config"
+	"github.com/bmdavis419/go-backend-template/database"
+	"github.com/bmdavis419/go-backend-template/router"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 )
 
-func SetupAndRunApp() error {
+func Setup() (*fiber.App, error) {
 	// load env
 	err := config.LoadENV()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// start database
 	err = database.StartMongoDB()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// defer closing database
@@ -42,9 +40,5 @@ func SetupAndRunApp() error {
 	// attach swagger
 	config.AddSwaggerRoutes(app)
 
-	// get the port and start
-	port := os.Getenv("PORT")
-	app.Listen(":" + port)
-
-	return nil
+	return app, nil
 }

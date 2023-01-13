@@ -1,4 +1,4 @@
-# the-better-backend
+# go-backend-template
 A template for a GoLang backend using Fiber, MongoDB, a Makefile, and more
 
 ## Getting Started

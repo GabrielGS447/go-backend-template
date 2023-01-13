@@ -1,4 +1,4 @@
-module github.com/bmdavis419/the-better-backend
+module github.com/bmdavis419/go-backend-template
 
 go 1.19
 

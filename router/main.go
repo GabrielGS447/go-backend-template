@@ -1,7 +1,7 @@
 package router
 
 import (
-	"github.com/bmdavis419/the-better-backend/handlers"
+	"github.com/bmdavis419/go-backend-template/handlers"
 	"github.com/gofiber/fiber/v2"
 )
 

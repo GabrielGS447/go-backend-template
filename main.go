@@ -1,8 +1,11 @@
 package main
 
 import (
-	"github.com/bmdavis419/the-better-backend/app"
-	_ "github.com/bmdavis419/the-better-backend/docs"
+	"log"
+	"os"
+
+	"github.com/bmdavis419/go-backend-template/app"
+	_ "github.com/bmdavis419/go-backend-template/docs"
 )
 
 // @title The Better Backend Template
@@ -13,9 +16,13 @@ import (
 // @host localhost:8080
 // @BasePath /
 func main() {
-	// setup and run app
-	err := app.SetupAndRunApp()
+	// setup app
+	server, err := app.Setup()
 	if err != nil {
 		panic(err)
 	}
+
+	// get the port and start server
+	port := os.Getenv("PORT")
+	log.Fatal(server.Listen(":" + port))
 }
