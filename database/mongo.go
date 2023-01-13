@@ -12,7 +12,7 @@ import (
 var mongoClient *mongo.Client
 var dbName string
 
-func GetCollection(name string) *mongo.Collection {
+func getCollection(name string) *mongo.Collection {
 	return mongoClient.Database(dbName).Collection(name)
 }
 

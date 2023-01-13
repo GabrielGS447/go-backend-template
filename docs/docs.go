@@ -85,7 +85,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/handlers.CreateTodoDTO"
+                            "$ref": "#/definitions/dtos.CreateTodo"
                         }
                     }
                 ],
@@ -93,7 +93,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handlers.CreateTodoResDTO"
+                            "$ref": "#/definitions/dtos.CreateTodoRes"
                         }
                     }
                 }
@@ -146,7 +146,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/handlers.UpdateTodoDTO"
+                            "$ref": "#/definitions/dtos.UpdateTodo"
                         }
                     },
                     {
@@ -161,7 +161,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handlers.UpdateTodoResDTO"
+                            "$ref": "#/definitions/dtos.UpdateTodoRes"
                         }
                     }
                 }
@@ -188,7 +188,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handlers.DeleteTodoResDTO"
+                            "$ref": "#/definitions/dtos.DeleteTodoRes"
                         }
                     }
                 }
@@ -196,7 +196,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "handlers.CreateTodoDTO": {
+        "dtos.CreateTodo": {
             "type": "object",
             "properties": {
                 "completed": {
@@ -213,7 +213,7 @@ const docTemplate = `{
                 }
             }
         },
-        "handlers.CreateTodoResDTO": {
+        "dtos.CreateTodoRes": {
             "type": "object",
             "properties": {
                 "inserted_id": {
@@ -221,7 +221,7 @@ const docTemplate = `{
                 }
             }
         },
-        "handlers.DeleteTodoResDTO": {
+        "dtos.DeleteTodoRes": {
             "type": "object",
             "properties": {
                 "deleted_count": {
@@ -229,7 +229,7 @@ const docTemplate = `{
                 }
             }
         },
-        "handlers.UpdateTodoDTO": {
+        "dtos.UpdateTodo": {
             "type": "object",
             "properties": {
                 "completed": {
@@ -246,7 +246,7 @@ const docTemplate = `{
                 }
             }
         },
-        "handlers.UpdateTodoResDTO": {
+        "dtos.UpdateTodoRes": {
             "type": "object",
             "properties": {
                 "updated_count": {

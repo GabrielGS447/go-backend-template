@@ -78,7 +78,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/handlers.CreateTodoDTO"
+                            "$ref": "#/definitions/dtos.CreateTodo"
                         }
                     }
                 ],
@@ -86,7 +86,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handlers.CreateTodoResDTO"
+                            "$ref": "#/definitions/dtos.CreateTodoRes"
                         }
                     }
                 }
@@ -139,7 +139,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/handlers.UpdateTodoDTO"
+                            "$ref": "#/definitions/dtos.UpdateTodo"
                         }
                     },
                     {
@@ -154,7 +154,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handlers.UpdateTodoResDTO"
+                            "$ref": "#/definitions/dtos.UpdateTodoRes"
                         }
                     }
                 }
@@ -181,7 +181,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handlers.DeleteTodoResDTO"
+                            "$ref": "#/definitions/dtos.DeleteTodoRes"
                         }
                     }
                 }
@@ -189,7 +189,7 @@
         }
     },
     "definitions": {
-        "handlers.CreateTodoDTO": {
+        "dtos.CreateTodo": {
             "type": "object",
             "properties": {
                 "completed": {
@@ -206,7 +206,7 @@
                 }
             }
         },
-        "handlers.CreateTodoResDTO": {
+        "dtos.CreateTodoRes": {
             "type": "object",
             "properties": {
                 "inserted_id": {
@@ -214,7 +214,7 @@
                 }
             }
         },
-        "handlers.DeleteTodoResDTO": {
+        "dtos.DeleteTodoRes": {
             "type": "object",
             "properties": {
                 "deleted_count": {
@@ -222,7 +222,7 @@
                 }
             }
         },
-        "handlers.UpdateTodoDTO": {
+        "dtos.UpdateTodo": {
             "type": "object",
             "properties": {
                 "completed": {
@@ -239,7 +239,7 @@
                 }
             }
         },
-        "handlers.UpdateTodoResDTO": {
+        "dtos.UpdateTodoRes": {
             "type": "object",
             "properties": {
                 "updated_count": {

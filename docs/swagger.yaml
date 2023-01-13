@@ -1,6 +1,6 @@
 basePath: /
 definitions:
-  handlers.CreateTodoDTO:
+  dtos.CreateTodo:
     properties:
       completed:
         type: boolean
@@ -11,17 +11,17 @@ definitions:
       title:
         type: string
     type: object
-  handlers.CreateTodoResDTO:
+  dtos.CreateTodoRes:
     properties:
       inserted_id:
         type: string
     type: object
-  handlers.DeleteTodoResDTO:
+  dtos.DeleteTodoRes:
     properties:
       deleted_count:
         type: integer
     type: object
-  handlers.UpdateTodoDTO:
+  dtos.UpdateTodo:
     properties:
       completed:
         type: boolean
@@ -32,7 +32,7 @@ definitions:
       title:
         type: string
     type: object
-  handlers.UpdateTodoResDTO:
+  dtos.UpdateTodoRes:
     properties:
       updated_count:
         type: integer
@@ -100,14 +100,14 @@ paths:
         name: todo
         required: true
         schema:
-          $ref: '#/definitions/handlers.CreateTodoDTO'
+          $ref: '#/definitions/dtos.CreateTodo'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handlers.CreateTodoResDTO'
+            $ref: '#/definitions/dtos.CreateTodoRes'
       summary: Create a todo.
       tags:
       - todos
@@ -126,7 +126,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handlers.DeleteTodoResDTO'
+            $ref: '#/definitions/dtos.DeleteTodoRes'
       summary: Delete a single todo.
       tags:
       - todos
@@ -158,7 +158,7 @@ paths:
         name: todo
         required: true
         schema:
-          $ref: '#/definitions/handlers.UpdateTodoDTO'
+          $ref: '#/definitions/dtos.UpdateTodo'
       - description: Todo ID
         in: path
         name: id
@@ -170,7 +170,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handlers.UpdateTodoResDTO'
+            $ref: '#/definitions/dtos.UpdateTodoRes'
       summary: Update a todo.
       tags:
       - todos
