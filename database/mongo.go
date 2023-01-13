@@ -9,6 +9,10 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+const (
+	TodosCollection = "todos"
+)
+
 var mongoClient *mongo.Client
 var dbName string
 

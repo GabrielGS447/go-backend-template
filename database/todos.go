@@ -12,7 +12,7 @@ import (
 )
 
 func CreateTodo(ctx context.Context, data *models.CreateTodoDTO) (string, error) {
-	coll := getCollection("todos")
+	coll := getCollection(TodosCollection)
 
 	res, err := coll.InsertOne(ctx, data)
 	if err != nil {
@@ -23,7 +23,7 @@ func CreateTodo(ctx context.Context, data *models.CreateTodoDTO) (string, error)
 }
 
 func GetAllTodos(ctx context.Context) (*[]models.Todo, error) {
-	coll := getCollection("todos")
+	coll := getCollection(TodosCollection)
 
 	filter := bson.M{}
 	opts := options.Find().SetSkip(0).SetLimit(100)
@@ -48,7 +48,7 @@ func GetTodoById(ctx context.Context, id string) (*models.Todo, error) {
 		return nil, errs.ErrTodoNotFound
 	}
 
-	coll := getCollection("todos")
+	coll := getCollection(TodosCollection)
 	filter := bson.M{"_id": objectId}
 	todo := new(models.Todo)
 
@@ -69,7 +69,7 @@ func UpdateTodo(ctx context.Context, id string, data *models.UpdateTodoDTO) erro
 		return errs.ErrTodoNotFound
 	}
 
-	coll := getCollection("todos")
+	coll := getCollection(TodosCollection)
 	filter := bson.M{"_id": objectId}
 	update := bson.M{"$set": data}
 
@@ -91,7 +91,7 @@ func DeleteTodo(ctx context.Context, id string) error {
 		return errs.ErrTodoNotFound
 	}
 
-	coll := getCollection("todos")
+	coll := getCollection(TodosCollection)
 	filter := bson.M{"_id": objectId}
 	res, err := coll.DeleteOne(ctx, filter)
 	if err != nil {
