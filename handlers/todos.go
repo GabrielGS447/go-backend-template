@@ -1,23 +1,25 @@
 package handlers
 
 import (
-	"github.com/bmdavis419/go-backend-template/dtos"
+	_ "github.com/bmdavis419/go-backend-template/docs"
 	"github.com/bmdavis419/go-backend-template/errs"
+	"github.com/bmdavis419/go-backend-template/models"
 	"github.com/bmdavis419/go-backend-template/services"
 	"github.com/bmdavis419/go-backend-template/utils"
 	"github.com/gofiber/fiber/v2"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // @Summary Create a todo.
 // @Description create a single todo.
 // @Tags todos
 // @Accept json
-// @Param todo body dtos.CreateTodo true "Todo to create"
+// @Param todo body models.CreateTodoDTO true "Todo to create"
 // @Produce json
-// @Success 200 {object} dtos.CreateTodoRes
+// @Success 200 {object} CreateTodoRes
 // @Router /todos [post]
 func CreateTodo(c *fiber.Ctx) error {
-	nTodo := new(dtos.CreateTodo)
+	nTodo := new(models.CreateTodoDTO)
 
 	if err := c.BodyParser(nTodo); err != nil {
 		return c.Status(400).JSON(fiber.Map{"error": err.Error()})
@@ -73,15 +75,15 @@ func GetTodoById(c *fiber.Ctx) error {
 // @Description update a single todo.
 // @Tags todos
 // @Accept json
-// @Param todo body dtos.UpdateTodo true "Todo update data"
+// @Param todo body models.UpdateTodoDTO true "Todo update data"
 // @Param id path string true "Todo ID"
 // @Produce json
-// @Success 200 {object} dtos.UpdateOrDeleteTodoRes
+// @Success 200 {object} UpdateOrDeleteTodoRes
 // @Router /todos/:id [put]
 func UpdateTodo(c *fiber.Ctx) error {
 	id := c.Params("id")
 
-	uTodo := new(dtos.UpdateTodo)
+	uTodo := new(models.UpdateTodoDTO)
 
 	if err := c.BodyParser(uTodo); err != nil {
 		return c.Status(400).JSON(fiber.Map{"error": err.Error()})
@@ -104,7 +106,7 @@ func UpdateTodo(c *fiber.Ctx) error {
 // @Tags todos
 // @Param id path string true "Todo ID"
 // @Produce json
-// @Success 200 {object} dtos.UpdateOrDeleteTodoRes
+// @Success 200 {object} UpdateOrDeleteTodoRes
 // @Router /todos/:id [delete]
 func DeleteTodo(c *fiber.Ctx) error {
 	id := c.Params("id")
@@ -124,4 +126,12 @@ func handleTodoError(c *fiber.Ctx, err error) error {
 	default:
 		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
 	}
+}
+
+type CreateTodoRes struct {
+	InsertedId primitive.ObjectID `json:"inserted_id" bson:"_id"`
+}
+
+type UpdateOrDeleteTodoRes struct {
+	Message string `json:"message" bson:"message"`
 }

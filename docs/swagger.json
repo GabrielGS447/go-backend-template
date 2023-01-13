@@ -78,7 +78,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dtos.CreateTodo"
+                            "$ref": "#/definitions/models.CreateTodoDTO"
                         }
                     }
                 ],
@@ -86,7 +86,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dtos.CreateTodoRes"
+                            "$ref": "#/definitions/handlers.CreateTodoRes"
                         }
                     }
                 }
@@ -139,7 +139,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dtos.UpdateTodo"
+                            "$ref": "#/definitions/models.UpdateTodoDTO"
                         }
                     },
                     {
@@ -154,7 +154,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dtos.UpdateTodoRes"
+                            "$ref": "#/definitions/handlers.UpdateOrDeleteTodoRes"
                         }
                     }
                 }
@@ -181,7 +181,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dtos.DeleteTodoRes"
+                            "$ref": "#/definitions/handlers.UpdateOrDeleteTodoRes"
                         }
                     }
                 }
@@ -189,24 +189,7 @@
         }
     },
     "definitions": {
-        "dtos.CreateTodo": {
-            "type": "object",
-            "properties": {
-                "completed": {
-                    "type": "boolean"
-                },
-                "date": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "dtos.CreateTodoRes": {
+        "handlers.CreateTodoRes": {
             "type": "object",
             "properties": {
                 "inserted_id": {
@@ -214,16 +197,22 @@
                 }
             }
         },
-        "dtos.DeleteTodoRes": {
+        "handlers.UpdateOrDeleteTodoRes": {
             "type": "object",
             "properties": {
-                "deleted_count": {
-                    "type": "integer"
+                "message": {
+                    "type": "string"
                 }
             }
         },
-        "dtos.UpdateTodo": {
+        "models.CreateTodoDTO": {
             "type": "object",
+            "required": [
+                "completed",
+                "date",
+                "description",
+                "title"
+            ],
             "properties": {
                 "completed": {
                     "type": "boolean"
@@ -232,18 +221,14 @@
                     "type": "string"
                 },
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 5
                 },
                 "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "dtos.UpdateTodoRes": {
-            "type": "object",
-            "properties": {
-                "updated_count": {
-                    "type": "integer"
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 5
                 }
             }
         },
@@ -264,6 +249,33 @@
                 },
                 "title": {
                     "type": "string"
+                }
+            }
+        },
+        "models.UpdateTodoDTO": {
+            "type": "object",
+            "required": [
+                "completed",
+                "date",
+                "description",
+                "title"
+            ],
+            "properties": {
+                "completed": {
+                    "type": "boolean"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 5
+                },
+                "title": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 5
                 }
             }
         }

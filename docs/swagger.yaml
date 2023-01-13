@@ -1,41 +1,34 @@
 basePath: /
 definitions:
-  dtos.CreateTodo:
-    properties:
-      completed:
-        type: boolean
-      date:
-        type: string
-      description:
-        type: string
-      title:
-        type: string
-    type: object
-  dtos.CreateTodoRes:
+  handlers.CreateTodoRes:
     properties:
       inserted_id:
         type: string
     type: object
-  dtos.DeleteTodoRes:
+  handlers.UpdateOrDeleteTodoRes:
     properties:
-      deleted_count:
-        type: integer
+      message:
+        type: string
     type: object
-  dtos.UpdateTodo:
+  models.CreateTodoDTO:
     properties:
       completed:
         type: boolean
       date:
         type: string
       description:
+        maxLength: 50
+        minLength: 5
         type: string
       title:
+        maxLength: 50
+        minLength: 5
         type: string
-    type: object
-  dtos.UpdateTodoRes:
-    properties:
-      updated_count:
-        type: integer
+    required:
+    - completed
+    - date
+    - description
+    - title
     type: object
   models.Todo:
     properties:
@@ -49,6 +42,26 @@ definitions:
         type: string
       title:
         type: string
+    type: object
+  models.UpdateTodoDTO:
+    properties:
+      completed:
+        type: boolean
+      date:
+        type: string
+      description:
+        maxLength: 50
+        minLength: 5
+        type: string
+      title:
+        maxLength: 50
+        minLength: 5
+        type: string
+    required:
+    - completed
+    - date
+    - description
+    - title
     type: object
 host: localhost:8080
 info:
@@ -100,14 +113,14 @@ paths:
         name: todo
         required: true
         schema:
-          $ref: '#/definitions/dtos.CreateTodo'
+          $ref: '#/definitions/models.CreateTodoDTO'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dtos.CreateTodoRes'
+            $ref: '#/definitions/handlers.CreateTodoRes'
       summary: Create a todo.
       tags:
       - todos
@@ -126,7 +139,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dtos.DeleteTodoRes'
+            $ref: '#/definitions/handlers.UpdateOrDeleteTodoRes'
       summary: Delete a single todo.
       tags:
       - todos
@@ -158,7 +171,7 @@ paths:
         name: todo
         required: true
         schema:
-          $ref: '#/definitions/dtos.UpdateTodo'
+          $ref: '#/definitions/models.UpdateTodoDTO'
       - description: Todo ID
         in: path
         name: id
@@ -170,7 +183,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/dtos.UpdateTodoRes'
+            $ref: '#/definitions/handlers.UpdateOrDeleteTodoRes'
       summary: Update a todo.
       tags:
       - todos

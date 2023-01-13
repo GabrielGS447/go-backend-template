@@ -10,11 +10,10 @@ import (
 	"context"
 
 	"github.com/bmdavis419/go-backend-template/database"
-	"github.com/bmdavis419/go-backend-template/dtos"
 	"github.com/bmdavis419/go-backend-template/models"
 )
 
-func CreateTodo(ctx context.Context, data *dtos.CreateTodo) (string, error) {
+func CreateTodo(ctx context.Context, data *models.CreateTodoDTO) (string, error) {
 	return database.CreateTodo(ctx, data)
 }
 
@@ -26,7 +25,7 @@ func GetTodoById(ctx context.Context, id string) (*models.Todo, error) {
 	return database.GetTodoById(ctx, id)
 }
 
-func UpdateTodo(ctx context.Context, id string, data *dtos.UpdateTodo) error {
+func UpdateTodo(ctx context.Context, id string, data *models.UpdateTodoDTO) error {
 	return database.UpdateTodo(ctx, id, data)
 }
 

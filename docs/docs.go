@@ -85,7 +85,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dtos.CreateTodo"
+                            "$ref": "#/definitions/models.CreateTodoDTO"
                         }
                     }
                 ],
@@ -93,7 +93,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dtos.CreateTodoRes"
+                            "$ref": "#/definitions/handlers.CreateTodoRes"
                         }
                     }
                 }
@@ -146,7 +146,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dtos.UpdateTodo"
+                            "$ref": "#/definitions/models.UpdateTodoDTO"
                         }
                     },
                     {
@@ -161,7 +161,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dtos.UpdateTodoRes"
+                            "$ref": "#/definitions/handlers.UpdateOrDeleteTodoRes"
                         }
                     }
                 }
@@ -188,7 +188,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/dtos.DeleteTodoRes"
+                            "$ref": "#/definitions/handlers.UpdateOrDeleteTodoRes"
                         }
                     }
                 }
@@ -196,24 +196,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "dtos.CreateTodo": {
-            "type": "object",
-            "properties": {
-                "completed": {
-                    "type": "boolean"
-                },
-                "date": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "dtos.CreateTodoRes": {
+        "handlers.CreateTodoRes": {
             "type": "object",
             "properties": {
                 "inserted_id": {
@@ -221,16 +204,22 @@ const docTemplate = `{
                 }
             }
         },
-        "dtos.DeleteTodoRes": {
+        "handlers.UpdateOrDeleteTodoRes": {
             "type": "object",
             "properties": {
-                "deleted_count": {
-                    "type": "integer"
+                "message": {
+                    "type": "string"
                 }
             }
         },
-        "dtos.UpdateTodo": {
+        "models.CreateTodoDTO": {
             "type": "object",
+            "required": [
+                "completed",
+                "date",
+                "description",
+                "title"
+            ],
             "properties": {
                 "completed": {
                     "type": "boolean"
@@ -239,18 +228,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 5
                 },
                 "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "dtos.UpdateTodoRes": {
-            "type": "object",
-            "properties": {
-                "updated_count": {
-                    "type": "integer"
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 5
                 }
             }
         },
@@ -271,6 +256,33 @@ const docTemplate = `{
                 },
                 "title": {
                     "type": "string"
+                }
+            }
+        },
+        "models.UpdateTodoDTO": {
+            "type": "object",
+            "required": [
+                "completed",
+                "date",
+                "description",
+                "title"
+            ],
+            "properties": {
+                "completed": {
+                    "type": "boolean"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 5
+                },
+                "title": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 5
                 }
             }
         }
