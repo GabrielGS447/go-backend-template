@@ -16,6 +16,9 @@ import (
 // @host localhost:8080
 // @BasePath /
 func main() {
+	// defer app teardown
+	defer app.Teardown()
+
 	// setup app
 	server, err := app.Setup()
 	if err != nil {

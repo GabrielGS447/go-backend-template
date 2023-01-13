@@ -22,9 +22,6 @@ func Setup() (*fiber.App, error) {
 		return nil, err
 	}
 
-	// defer closing database
-	defer database.CloseMongoDB()
-
 	// create app
 	app := fiber.New()
 
