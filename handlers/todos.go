@@ -4,6 +4,7 @@ import (
 	"github.com/bmdavis419/go-backend-template/dtos"
 	"github.com/bmdavis419/go-backend-template/errs"
 	"github.com/bmdavis419/go-backend-template/services"
+	"github.com/bmdavis419/go-backend-template/utils"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -19,7 +20,11 @@ func CreateTodo(c *fiber.Ctx) error {
 	nTodo := new(dtos.CreateTodo)
 
 	if err := c.BodyParser(nTodo); err != nil {
-		return c.Status(400).JSON(fiber.Map{"bad input": err.Error()})
+		return c.Status(400).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	if err := utils.ValidateInput(nTodo); err != nil {
+		return c.Status(422).JSON(fiber.Map{"error": utils.GetValidationErrors(err)})
 	}
 
 	insertedId, err := services.CreateTodo(c.Context(), nTodo)
@@ -71,7 +76,7 @@ func GetTodoById(c *fiber.Ctx) error {
 // @Param todo body dtos.UpdateTodo true "Todo update data"
 // @Param id path string true "Todo ID"
 // @Produce json
-// @Success 200 {object} dtos.UpdateTodoRes
+// @Success 200 {object} dtos.UpdateOrDeleteTodoRes
 // @Router /todos/:id [put]
 func UpdateTodo(c *fiber.Ctx) error {
 	id := c.Params("id")
@@ -79,7 +84,11 @@ func UpdateTodo(c *fiber.Ctx) error {
 	uTodo := new(dtos.UpdateTodo)
 
 	if err := c.BodyParser(uTodo); err != nil {
-		return c.Status(400).JSON(fiber.Map{"bad input": err.Error()})
+		return c.Status(400).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	if err := utils.ValidateInput(uTodo); err != nil {
+		return c.Status(422).JSON(fiber.Map{"error": utils.GetValidationErrors(err)})
 	}
 
 	err := services.UpdateTodo(c.Context(), id, uTodo)
@@ -95,7 +104,7 @@ func UpdateTodo(c *fiber.Ctx) error {
 // @Tags todos
 // @Param id path string true "Todo ID"
 // @Produce json
-// @Success 200 {object} dtos.DeleteTodoRes
+// @Success 200 {object} dtos.UpdateOrDeleteTodoRes
 // @Router /todos/:id [delete]
 func DeleteTodo(c *fiber.Ctx) error {
 	id := c.Params("id")
@@ -111,8 +120,8 @@ func DeleteTodo(c *fiber.Ctx) error {
 func handleTodoError(c *fiber.Ctx, err error) error {
 	switch err {
 	case errs.ErrTodoNotFound:
-		return c.Status(404).JSON(fiber.Map{"message": err.Error()})
+		return c.Status(404).JSON(fiber.Map{"error": err.Error()})
 	default:
-		return c.Status(500).JSON(fiber.Map{"message": err.Error()})
+		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
 	}
 }
