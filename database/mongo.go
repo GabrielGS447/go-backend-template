@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"os"
+	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -34,10 +35,20 @@ func StartMongoDB() error {
 	}
 
 	var err error
-	mongoClient, err = mongo.Connect(context.Background(), options.Client().ApplyURI(uri))
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+
+	mongoClient, err = mongo.Connect(ctx, options.Client().ApplyURI(uri))
 	if err != nil {
 		panic(err)
 	}
+
+	err = mongoClient.Ping(ctx, nil)
+	if err != nil {
+		panic(err)
+	}
+
 	return nil
 }
 
