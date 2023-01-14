@@ -1,6 +1,9 @@
 package handlers
 
 import (
+	"encoding/json"
+	"fmt"
+
 	_ "github.com/bmdavis419/go-backend-template/docs"
 	"github.com/bmdavis419/go-backend-template/errs"
 	"github.com/bmdavis419/go-backend-template/models"
@@ -22,16 +25,16 @@ func CreateTodo(c *fiber.Ctx) error {
 	nTodo := new(models.CreateTodoDTO)
 
 	if err := c.BodyParser(nTodo); err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": err.Error()})
+		return handleTodoErrors(c, err)
 	}
 
 	if err := utils.ValidateInput(nTodo); err != nil {
-		return c.Status(422).JSON(fiber.Map{"error": utils.GetValidationErrors(err)})
+		return handleTodoErrors(c, err)
 	}
 
 	insertedId, err := services.CreateTodo(c.Context(), nTodo)
 	if err != nil {
-		return handleTodoError(c, err)
+		return handleTodoErrors(c, err)
 	}
 
 	return c.Status(200).JSON(fiber.Map{"todo_id": insertedId})
@@ -47,7 +50,7 @@ func CreateTodo(c *fiber.Ctx) error {
 func GetAllTodos(c *fiber.Ctx) error {
 	todos, err := services.GetAllTodos(c.Context())
 	if err != nil {
-		return handleTodoError(c, err)
+		return handleTodoErrors(c, err)
 	}
 
 	return c.Status(200).JSON(todos)
@@ -65,7 +68,7 @@ func GetTodoById(c *fiber.Ctx) error {
 
 	todo, err := services.GetTodoById(c.Context(), id)
 	if err != nil {
-		return handleTodoError(c, err)
+		return handleTodoErrors(c, err)
 	}
 
 	return c.Status(200).JSON(todo)
@@ -86,16 +89,16 @@ func UpdateTodo(c *fiber.Ctx) error {
 	uTodo := new(models.UpdateTodoDTO)
 
 	if err := c.BodyParser(uTodo); err != nil {
-		return c.Status(400).JSON(fiber.Map{"error": err.Error()})
+		return handleTodoErrors(c, err)
 	}
 
 	if err := utils.ValidateInput(uTodo); err != nil {
-		return c.Status(422).JSON(fiber.Map{"error": utils.GetValidationErrors(err)})
+		return handleTodoErrors(c, err)
 	}
 
 	err := services.UpdateTodo(c.Context(), id, uTodo)
 	if err != nil {
-		return handleTodoError(c, err)
+		return handleTodoErrors(c, err)
 	}
 
 	return c.Status(200).JSON(fiber.Map{"message": "todo updated"})
@@ -113,17 +116,24 @@ func DeleteTodo(c *fiber.Ctx) error {
 
 	err := services.DeleteTodo(c.Context(), id)
 	if err != nil {
-		return handleTodoError(c, err)
+		return handleTodoErrors(c, err)
 	}
 
 	return c.Status(200).JSON(fiber.Map{"message": "todo deleted"})
 }
 
-func handleTodoError(c *fiber.Ctx, err error) error {
+func handleTodoErrors(c *fiber.Ctx, err error) error {
+	if valErrs := utils.GetValidationErrors(err); valErrs != nil {
+		return c.Status(400).JSON(fiber.Map{"errors": valErrs})
+	}
+
 	switch err {
 	case errs.ErrTodoNotFound:
 		return c.Status(404).JSON(fiber.Map{"error": err.Error()})
+	case err.(*json.SyntaxError):
+		return c.Status(422).JSON(fiber.Map{"error": "Invalid JSON syntax"})
 	default:
+		fmt.Println("error:", err)
 		return c.Status(500).JSON(fiber.Map{"error": "Something went wrong, please try again later."})
 	}
 }
