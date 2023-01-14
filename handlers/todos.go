@@ -124,7 +124,7 @@ func handleTodoError(c *fiber.Ctx, err error) error {
 	case errs.ErrTodoNotFound:
 		return c.Status(404).JSON(fiber.Map{"error": err.Error()})
 	default:
-		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(500).JSON(fiber.Map{"error": "Something went wrong, please try again later."})
 	}
 }
 
