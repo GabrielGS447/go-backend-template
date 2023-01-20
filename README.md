@@ -1,12 +1,9 @@
 # go-backend-template
-A template for a GoLang backend using Fiber, MongoDB, a Makefile, and more
+A template for a GoLang backend API using Fiber and MongoDB.
+
+Based on @bmdavis419 [the-better-backend](https://youtu.be/6C-2R92L01Q).
 
 ## Getting Started
-
-### VIDEOS
-
-- [GoLang Download & Setup](https://www.youtube.com/watch?v=Q7uh85_i0-M)
-- [Video Breakdown](https://youtu.be/6C-2R92L01Q)
 
 ### Prerequisites
 
