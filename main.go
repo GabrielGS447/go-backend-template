@@ -41,7 +41,9 @@ func main() {
 
 func start(server *fiber.App) {
 	port := os.Getenv("PORT")
-	server.Listen(":" + port)
+	if err := server.Listen(":" + port); err != nil {
+		panic(err)
+	}
 }
 
 func waitForShutdownSignal() {

@@ -8,8 +8,12 @@ import (
 )
 
 func Teardown(server *fiber.App) {
+	// stop server before database, otherwise ongoing requests will lose access to it.
 	fmt.Println("Stopping server...")
-	server.Shutdown() // stop server before database!!!
+	if err := server.Shutdown(); err != nil {
+		panic(err)
+	}
+
 	fmt.Println("Closing database connection...")
 	database.CloseMongoDB()
 }
