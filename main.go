@@ -1,11 +1,14 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/bmdavis419/go-backend-template/app"
 	_ "github.com/bmdavis419/go-backend-template/docs"
+	"github.com/gofiber/fiber/v2"
 )
 
 // @title The Better Backend Template
@@ -16,16 +19,34 @@ import (
 // @host localhost:8080
 // @BasePath /
 func main() {
-	// defer app teardown
-	defer app.Teardown()
-
 	// setup app
 	server, err := app.Setup()
 	if err != nil {
 		panic(err)
 	}
 
-	// get the port and start server
+	// start server in a goroutine so it doesn't block
+	go start(server)
+
+	// wait for a signal to gracefully shutdown
+	waitForShutdownSignal()
+
+	// teardown app
+	app.Teardown(server)
+
+	fmt.Println("Application gracefully stopped.")
+
+	os.Exit(0)
+}
+
+func start(server *fiber.App) {
 	port := os.Getenv("PORT")
-	log.Fatal(server.Listen(":" + port))
+	server.Listen(":" + port)
+}
+
+func waitForShutdownSignal() {
+	quit := make(chan os.Signal, 1)
+	defer close(quit)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
 }
