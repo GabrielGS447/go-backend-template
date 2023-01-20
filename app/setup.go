@@ -13,34 +13,17 @@ import (
 )
 
 func Setup() (*fiber.App, error) {
-	// load env
-	err := loadENV()
-	if err != nil {
+	if err := loadENV(); err != nil {
 		return nil, err
 	}
 
-	// start database
-	err = database.StartMongoDB()
-	if err != nil {
+	if err := database.StartMongoDB(); err != nil {
 		return nil, err
 	}
 
-	// create app
-	app := fiber.New()
+	server := createServer()
 
-	// attach middleware
-	app.Use(recover.New())
-	app.Use(logger.New(logger.Config{
-		Format: "[${ip}]:${port} ${status} - ${method} ${path} ${latency}\n",
-	}))
-
-	// setup routes
-	router.SetupRoutes(app)
-
-	// attach swagger
-	addSwaggerRoute(app)
-
-	return app, nil
+	return server, nil
 }
 
 func loadENV() error {
@@ -54,7 +37,20 @@ func loadENV() error {
 	return nil
 }
 
-func addSwaggerRoute(app *fiber.App) {
-	// setup swagger
-	app.Get("/swagger/*", swagger.HandlerDefault)
+func createServer() *fiber.App {
+	// creates a new Fiber instance
+	server := fiber.New()
+
+	// attach middlewares
+	server.Use(recover.New())
+	server.Use(logger.New(logger.Config{
+		Format: "[${ip}]:${port} ${status} - ${method} ${path} ${latency}\n",
+	}))
+
+	router.AttachRoutes(server)
+
+	// attach swagger
+	server.Get("/swagger/*", swagger.HandlerDefault)
+
+	return server
 }
