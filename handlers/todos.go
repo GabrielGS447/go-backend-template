@@ -25,9 +25,6 @@ type todosHandler struct {
 	todosService services.TodosServiceInterface
 }
 
-// This checks that todosHandler correctly implements TodosHandlerInterface
-var _ TodosHandlerInterface = &todosHandler{}
-
 func NewTodoHandler(s services.TodosServiceInterface) TodosHandlerInterface {
 	return &todosHandler{
 		s,

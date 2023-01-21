@@ -25,9 +25,6 @@ type todosService struct {
 	todosRepository database.TodosRepositoryInterface
 }
 
-// This checks that todosService correctly implements TodosServiceInterface
-var _ TodosServiceInterface = &todosService{}
-
 func NewTodosService(r database.TodosRepositoryInterface) TodosServiceInterface {
 	return &todosService{
 		r,

@@ -24,9 +24,6 @@ type todosRepository struct {
 	todosCollection *mongo.Collection
 }
 
-// This checks that todosRepository correctly implements TodosRepositoryInterface
-var _ TodosRepositoryInterface = &todosRepository{}
-
 func NewTodosRepository() TodosRepositoryInterface {
 	return &todosRepository{
 		getCollection(todosCollection),
