@@ -1,0 +1,19 @@
+version: '3.9'
+services:
+
+  api:
+    build: .
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+
+  mongodb:
+    image: mongo:5.0.13
+    restart: always
+    healthcheck:
+      test: echo 'db.runCommand({serverStatus:1}).ok' | mongo --quiet | grep 1
+      timeout: 5s
+      retries: 5
+      start_period: 5s

@@ -1,0 +1,6 @@
+.env
+.air.toml
+.dockerignore
+Dockerfile
+docker-compose.yml
+/tmp
