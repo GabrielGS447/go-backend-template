@@ -13,6 +13,27 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+type TodosHandlerInterface interface {
+	CreateTodo(c *fiber.Ctx) error
+	GetAllTodos(c *fiber.Ctx) error
+	GetTodoById(c *fiber.Ctx) error
+	UpdateTodo(c *fiber.Ctx) error
+	DeleteTodo(c *fiber.Ctx) error
+}
+
+type todosHandler struct {
+	todosService services.TodosServiceInterface
+}
+
+// This checks that todosHandler correctly implements TodosHandlerInterface
+var _ TodosHandlerInterface = &todosHandler{}
+
+func NewTodoHandler(s services.TodosServiceInterface) TodosHandlerInterface {
+	return &todosHandler{
+		s,
+	}
+}
+
 // @Summary Create a todo.
 // @Description create a single todo.
 // @Tags todos
@@ -21,20 +42,20 @@ import (
 // @Produce json
 // @Success 200 {object} CreateTodoRes
 // @Router /todos [post]
-func CreateTodo(c *fiber.Ctx) error {
+func (h *todosHandler) CreateTodo(c *fiber.Ctx) error {
 	nTodo := new(models.CreateTodoDTO)
 
 	if err := c.BodyParser(nTodo); err != nil {
-		return handleTodoErrors(c, err)
+		return handleTodosErrors(c, err)
 	}
 
 	if err := utils.ValidateInput(nTodo); err != nil {
-		return handleTodoErrors(c, err)
+		return handleTodosErrors(c, err)
 	}
 
-	insertedId, err := services.CreateTodo(c.Context(), nTodo)
+	insertedId, err := h.todosService.CreateTodo(c.Context(), nTodo)
 	if err != nil {
-		return handleTodoErrors(c, err)
+		return handleTodosErrors(c, err)
 	}
 
 	return c.Status(200).JSON(fiber.Map{"todo_id": insertedId})
@@ -47,10 +68,10 @@ func CreateTodo(c *fiber.Ctx) error {
 // @Produce json
 // @Success 200 {object} []models.Todo
 // @Router /todos [get]
-func GetAllTodos(c *fiber.Ctx) error {
-	todos, err := services.GetAllTodos(c.Context())
+func (h *todosHandler) GetAllTodos(c *fiber.Ctx) error {
+	todos, err := h.todosService.GetAllTodos(c.Context())
 	if err != nil {
-		return handleTodoErrors(c, err)
+		return handleTodosErrors(c, err)
 	}
 
 	return c.Status(200).JSON(todos)
@@ -63,12 +84,12 @@ func GetAllTodos(c *fiber.Ctx) error {
 // @Produce json
 // @Success 200 {object} models.Todo
 // @Router /todos/:id [get]
-func GetTodoById(c *fiber.Ctx) error {
+func (h *todosHandler) GetTodoById(c *fiber.Ctx) error {
 	id := c.Params("id")
 
-	todo, err := services.GetTodoById(c.Context(), id)
+	todo, err := h.todosService.GetTodoById(c.Context(), id)
 	if err != nil {
-		return handleTodoErrors(c, err)
+		return handleTodosErrors(c, err)
 	}
 
 	return c.Status(200).JSON(todo)
@@ -83,22 +104,22 @@ func GetTodoById(c *fiber.Ctx) error {
 // @Produce json
 // @Success 200 {object} UpdateOrDeleteTodoRes
 // @Router /todos/:id [put]
-func UpdateTodo(c *fiber.Ctx) error {
+func (h *todosHandler) UpdateTodo(c *fiber.Ctx) error {
 	id := c.Params("id")
 
 	uTodo := new(models.UpdateTodoDTO)
 
 	if err := c.BodyParser(uTodo); err != nil {
-		return handleTodoErrors(c, err)
+		return handleTodosErrors(c, err)
 	}
 
 	if err := utils.ValidateInput(uTodo); err != nil {
-		return handleTodoErrors(c, err)
+		return handleTodosErrors(c, err)
 	}
 
-	err := services.UpdateTodo(c.Context(), id, uTodo)
+	err := h.todosService.UpdateTodo(c.Context(), id, uTodo)
 	if err != nil {
-		return handleTodoErrors(c, err)
+		return handleTodosErrors(c, err)
 	}
 
 	return c.Status(200).JSON(fiber.Map{"message": "todo updated"})
@@ -111,18 +132,18 @@ func UpdateTodo(c *fiber.Ctx) error {
 // @Produce json
 // @Success 200 {object} UpdateOrDeleteTodoRes
 // @Router /todos/:id [delete]
-func DeleteTodo(c *fiber.Ctx) error {
+func (h *todosHandler) DeleteTodo(c *fiber.Ctx) error {
 	id := c.Params("id")
 
-	err := services.DeleteTodo(c.Context(), id)
+	err := h.todosService.DeleteTodo(c.Context(), id)
 	if err != nil {
-		return handleTodoErrors(c, err)
+		return handleTodosErrors(c, err)
 	}
 
 	return c.Status(200).JSON(fiber.Map{"message": "todo deleted"})
 }
 
-func handleTodoErrors(c *fiber.Ctx, err error) error {
+func handleTodosErrors(c *fiber.Ctx, err error) error {
 	if valErrs := utils.GetValidationErrors(err); valErrs != nil {
 		return c.Status(400).JSON(fiber.Map{"errors": valErrs})
 	}

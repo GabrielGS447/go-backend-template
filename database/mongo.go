@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	TodosCollection = "todos"
+	todosCollection = "todos"
 )
 
 var mongoClient *mongo.Client

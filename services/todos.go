@@ -13,22 +13,43 @@ import (
 	"github.com/bmdavis419/go-backend-template/models"
 )
 
-func CreateTodo(ctx context.Context, data *models.CreateTodoDTO) (string, error) {
-	return database.CreateTodo(ctx, data)
+type TodosServiceInterface interface {
+	CreateTodo(ctx context.Context, data *models.CreateTodoDTO) (string, error)
+	GetAllTodos(ctx context.Context) (*[]models.Todo, error)
+	GetTodoById(ctx context.Context, id string) (*models.Todo, error)
+	UpdateTodo(ctx context.Context, id string, data *models.UpdateTodoDTO) error
+	DeleteTodo(ctx context.Context, id string) error
 }
 
-func GetAllTodos(ctx context.Context) (*[]models.Todo, error) {
-	return database.GetAllTodos(ctx)
+type todosService struct {
+	todosRepository database.TodosRepositoryInterface
 }
 
-func GetTodoById(ctx context.Context, id string) (*models.Todo, error) {
-	return database.GetTodoById(ctx, id)
+// This checks that todosService correctly implements TodosServiceInterface
+var _ TodosServiceInterface = &todosService{}
+
+func NewTodosService(r database.TodosRepositoryInterface) TodosServiceInterface {
+	return &todosService{
+		r,
+	}
 }
 
-func UpdateTodo(ctx context.Context, id string, data *models.UpdateTodoDTO) error {
-	return database.UpdateTodo(ctx, id, data)
+func (s *todosService) CreateTodo(ctx context.Context, data *models.CreateTodoDTO) (string, error) {
+	return s.todosRepository.CreateTodo(ctx, data)
 }
 
-func DeleteTodo(ctx context.Context, id string) error {
-	return database.DeleteTodo(ctx, id)
+func (s *todosService) GetAllTodos(ctx context.Context) (*[]models.Todo, error) {
+	return s.todosRepository.GetAllTodos(ctx)
+}
+
+func (s *todosService) GetTodoById(ctx context.Context, id string) (*models.Todo, error) {
+	return s.todosRepository.GetTodoById(ctx, id)
+}
+
+func (s *todosService) UpdateTodo(ctx context.Context, id string, data *models.UpdateTodoDTO) error {
+	return s.todosRepository.UpdateTodo(ctx, id, data)
+}
+
+func (s *todosService) DeleteTodo(ctx context.Context, id string) error {
+	return s.todosRepository.DeleteTodo(ctx, id)
 }
