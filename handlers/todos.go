@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 
-	_ "github.com/bmdavis419/go-backend-template/docs"
-	"github.com/bmdavis419/go-backend-template/errs"
-	"github.com/bmdavis419/go-backend-template/models"
-	"github.com/bmdavis419/go-backend-template/services"
-	"github.com/bmdavis419/go-backend-template/utils"
+	_ "github.com/gabrielgs449/go-backend-template/docs"
+	"github.com/gabrielgs449/go-backend-template/errs"
+	"github.com/gabrielgs449/go-backend-template/models"
+	"github.com/gabrielgs449/go-backend-template/services"
+	"github.com/gabrielgs449/go-backend-template/utils"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

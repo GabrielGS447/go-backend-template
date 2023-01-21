@@ -3,8 +3,8 @@ package app
 import (
 	"os"
 
-	"github.com/bmdavis419/go-backend-template/database"
-	"github.com/bmdavis419/go-backend-template/router"
+	"github.com/gabrielgs449/go-backend-template/database"
+	"github.com/gabrielgs449/go-backend-template/router"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"

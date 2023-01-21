@@ -6,8 +6,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/bmdavis419/go-backend-template/app"
-	_ "github.com/bmdavis419/go-backend-template/docs"
+	"github.com/gabrielgs449/go-backend-template/app"
+	_ "github.com/gabrielgs449/go-backend-template/docs"
 	"github.com/gofiber/fiber/v2"
 )
 

@@ -3,7 +3,7 @@ package app
 import (
 	"fmt"
 
-	"github.com/bmdavis419/go-backend-template/database"
+	"github.com/gabrielgs449/go-backend-template/database"
 	"github.com/gofiber/fiber/v2"
 )
 

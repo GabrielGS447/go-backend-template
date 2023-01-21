@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/bmdavis419/go-backend-template/errs"
-	"github.com/bmdavis419/go-backend-template/models"
+	"github.com/gabrielgs449/go-backend-template/errs"
+	"github.com/gabrielgs449/go-backend-template/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"

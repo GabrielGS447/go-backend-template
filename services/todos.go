@@ -9,8 +9,8 @@ package services
 import (
 	"context"
 
-	"github.com/bmdavis419/go-backend-template/database"
-	"github.com/bmdavis419/go-backend-template/models"
+	"github.com/gabrielgs449/go-backend-template/database"
+	"github.com/gabrielgs449/go-backend-template/models"
 )
 
 type TodosServiceInterface interface {

@@ -1,9 +1,9 @@
 package router
 
 import (
-	"github.com/bmdavis419/go-backend-template/database"
-	"github.com/bmdavis419/go-backend-template/handlers"
-	"github.com/bmdavis419/go-backend-template/services"
+	"github.com/gabrielgs449/go-backend-template/database"
+	"github.com/gabrielgs449/go-backend-template/handlers"
+	"github.com/gabrielgs449/go-backend-template/services"
 	"github.com/gofiber/fiber/v2"
 )
 
