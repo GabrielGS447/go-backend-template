@@ -41,6 +41,10 @@ func main() {
 
 func start(server *fiber.App) {
 	port := os.Getenv("PORT")
+	if port == "" {
+		port = "60384"
+	}
+
 	if err := server.Listen(":" + port); err != nil {
 		panic(err)
 	}

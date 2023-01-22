@@ -18,7 +18,7 @@ WORKDIR /
 
 COPY --from=build /go-backend-template /go-backend-template
 
-EXPOSE 8080
+EXPOSE 60384
 
 USER nonroot:nonroot
 
