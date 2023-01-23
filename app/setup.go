@@ -44,7 +44,7 @@ func createServer() *fiber.App {
 	// attach middlewares
 	server.Use(recover.New())
 	server.Use(logger.New(logger.Config{
-		Format: "[${ip}]:${port} ${status} - ${method} ${path} ${latency}\n",
+		Format: "${status} - ${method} ${path} - ${latency}\n",
 	}))
 
 	router.AttachRoutes(server)
