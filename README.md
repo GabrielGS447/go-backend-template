@@ -1,5 +1,5 @@
 # go-backend-template
-A template for a GoLang backend API using Fiber and MongoDB.
+A template for a GoLang backend API using Fiber and MongoDB. A version of this template using Echo can be found in a [separate branch](https://github.com/GabrielGS447/go-backend-template/tree/echo).
 
 Based on @bmdavis419 [the-better-backend](https://youtu.be/6C-2R92L01Q).
 
