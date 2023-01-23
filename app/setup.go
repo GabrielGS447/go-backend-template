@@ -5,14 +5,13 @@ import (
 
 	"github.com/gabrielgs449/go-backend-template/database"
 	"github.com/gabrielgs449/go-backend-template/router"
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/gofiber/fiber/v2/middleware/recover"
-	"github.com/gofiber/swagger"
 	"github.com/joho/godotenv"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
-func Setup() (*fiber.App, error) {
+func Setup() (*echo.Echo, error) {
 	if err := loadENV(); err != nil {
 		return nil, err
 	}
@@ -37,20 +36,20 @@ func loadENV() error {
 	return nil
 }
 
-func createServer() *fiber.App {
-	// creates a new Fiber instance
-	server := fiber.New()
+func createServer() *echo.Echo {
+	// creates a new Echo instance
+	server := echo.New()
 
 	// attach middlewares
-	server.Use(recover.New())
-	server.Use(logger.New(logger.Config{
-		Format: "[${ip}]:${port} ${status} - ${method} ${path} ${latency}\n",
+	server.Use(middleware.Recover())
+	server.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: "${status} - ${method} ${path} - ${latency_human}\n",
 	}))
 
 	router.AttachRoutes(server)
 
 	// attach swagger
-	server.Get("/swagger/*", swagger.HandlerDefault)
+	server.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	return server
 }

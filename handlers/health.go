@@ -1,6 +1,10 @@
 package handlers
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"net/http"
+
+	"github.com/labstack/echo/v4"
+)
 
 // @Summary Show the status of server.
 // @Description get the status of server.
@@ -9,6 +13,6 @@ import "github.com/gofiber/fiber/v2"
 // @Produce plain
 // @Success 200 "OK"
 // @Router /health [get]
-func HandleHealthCheck(c *fiber.Ctx) error {
-	return c.SendString("OK")
+func HandleHealthCheck(c echo.Context) error {
+	return c.String(http.StatusOK, "OK")
 }

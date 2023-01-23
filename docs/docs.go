@@ -199,7 +199,7 @@ const docTemplate = `{
         "handlers.CreateTodoRes": {
             "type": "object",
             "properties": {
-                "inserted_id": {
+                "todo_id": {
                     "type": "string"
                 }
             }
@@ -296,7 +296,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "The Better Backend Template",
-	Description:      "An example template of a Golang backend API using Fiber and MongoDB",
+	Description:      "An example template of a Golang backend API using Echo and MongoDB",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

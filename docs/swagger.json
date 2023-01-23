@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "An example template of a Golang backend API using Fiber and MongoDB",
+        "description": "An example template of a Golang backend API using Echo and MongoDB",
         "title": "The Better Backend Template",
         "contact": {
             "name": "Ben Davis"
@@ -192,7 +192,7 @@
         "handlers.CreateTodoRes": {
             "type": "object",
             "properties": {
-                "inserted_id": {
+                "todo_id": {
                     "type": "string"
                 }
             }

@@ -2,18 +2,19 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/gabrielgs449/go-backend-template/app"
 	_ "github.com/gabrielgs449/go-backend-template/docs"
-	"github.com/gofiber/fiber/v2"
+	"github.com/labstack/echo/v4"
 )
 
 // @title The Better Backend Template
 // @version 0.1
-// @description An example template of a Golang backend API using Fiber and MongoDB
+// @description An example template of a Golang backend API using Echo and MongoDB
 // @contact.name Ben Davis
 // @license.name MIT
 // @host localhost:8080
@@ -39,13 +40,13 @@ func main() {
 	os.Exit(0)
 }
 
-func start(server *fiber.App) {
+func start(server *echo.Echo) {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "60384"
 	}
 
-	if err := server.Listen(":" + port); err != nil {
+	if err := server.Start(":" + port); err != nil && err != http.ErrServerClosed {
 		panic(err)
 	}
 }

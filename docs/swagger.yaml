@@ -2,7 +2,7 @@ basePath: /
 definitions:
   handlers.CreateTodoRes:
     properties:
-      inserted_id:
+      todo_id:
         type: string
     type: object
   handlers.UpdateOrDeleteTodoRes:
@@ -67,7 +67,7 @@ host: localhost:8080
 info:
   contact:
     name: Ben Davis
-  description: An example template of a Golang backend API using Fiber and MongoDB
+  description: An example template of a Golang backend API using Echo and MongoDB
   license:
     name: MIT
   title: The Better Backend Template

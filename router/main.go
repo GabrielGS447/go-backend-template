@@ -4,20 +4,20 @@ import (
 	"github.com/gabrielgs449/go-backend-template/database"
 	"github.com/gabrielgs449/go-backend-template/handlers"
 	"github.com/gabrielgs449/go-backend-template/services"
-	"github.com/gofiber/fiber/v2"
+	"github.com/labstack/echo/v4"
 )
 
-func AttachRoutes(app *fiber.App) {
-	app.Get("/health", handlers.HandleHealthCheck)
+func AttachRoutes(server *echo.Echo) {
+	server.GET("/health", handlers.HandleHealthCheck)
 
 	// setup the todos group
 	todosHandler := makeTodosHandler()
-	todos := app.Group("/todos")
-	todos.Post("/", todosHandler.CreateTodo)
-	todos.Get("/", todosHandler.GetAllTodos)
-	todos.Get("/:id", todosHandler.GetTodoById)
-	todos.Put("/:id", todosHandler.UpdateTodo)
-	todos.Delete("/:id", todosHandler.DeleteTodo)
+	todos := server.Group("/todos")
+	todos.POST("", todosHandler.CreateTodo)
+	todos.GET("", todosHandler.GetAllTodos)
+	todos.GET("/:id", todosHandler.GetTodoById)
+	todos.PUT("/:id", todosHandler.UpdateTodo)
+	todos.DELETE("/:id", todosHandler.DeleteTodo)
 }
 
 func makeTodosHandler() handlers.TodosHandlerInterface {
