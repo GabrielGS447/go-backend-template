@@ -10,7 +10,6 @@ import (
 	"github.com/gabrielgs449/go-backend-template/services"
 	"github.com/gabrielgs449/go-backend-template/utils"
 	"github.com/gofiber/fiber/v2"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type TodosHandlerInterface interface {
@@ -55,7 +54,7 @@ func (h *todosHandler) CreateTodo(c *fiber.Ctx) error {
 		return handleTodosErrors(c, err)
 	}
 
-	return c.Status(200).JSON(fiber.Map{"todo_id": insertedId})
+	return c.Status(fiber.StatusOK).JSON(CreateTodoRes{TodoId: insertedId})
 }
 
 // @Summary Get all todos.
@@ -71,7 +70,7 @@ func (h *todosHandler) GetAllTodos(c *fiber.Ctx) error {
 		return handleTodosErrors(c, err)
 	}
 
-	return c.Status(200).JSON(todos)
+	return c.Status(fiber.StatusOK).JSON(todos)
 }
 
 // @Summary Get a single todo.
@@ -89,7 +88,7 @@ func (h *todosHandler) GetTodoById(c *fiber.Ctx) error {
 		return handleTodosErrors(c, err)
 	}
 
-	return c.Status(200).JSON(todo)
+	return c.Status(fiber.StatusOK).JSON(todo)
 }
 
 // @Summary Update a todo.
@@ -119,7 +118,9 @@ func (h *todosHandler) UpdateTodo(c *fiber.Ctx) error {
 		return handleTodosErrors(c, err)
 	}
 
-	return c.Status(200).JSON(fiber.Map{"message": "todo updated"})
+	return c.Status(fiber.StatusOK).JSON(
+		UpdateOrDeleteTodoRes{Message: fmt.Sprintf("todo with id %s updated", id)},
+	)
 }
 
 // @Summary Delete a single todo.
@@ -137,7 +138,9 @@ func (h *todosHandler) DeleteTodo(c *fiber.Ctx) error {
 		return handleTodosErrors(c, err)
 	}
 
-	return c.Status(200).JSON(fiber.Map{"message": "todo deleted"})
+	return c.Status(fiber.StatusOK).JSON(
+		UpdateOrDeleteTodoRes{Message: fmt.Sprintf("todo with id %s deleted", id)},
+	)
 }
 
 func handleTodosErrors(c *fiber.Ctx, err error) error {
@@ -147,19 +150,21 @@ func handleTodosErrors(c *fiber.Ctx, err error) error {
 
 	switch err {
 	case errs.ErrTodoNotFound:
-		return c.Status(404).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	case err.(*json.SyntaxError):
-		return c.Status(422).JSON(fiber.Map{"error": "Invalid JSON syntax"})
+		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{"error": "Invalid JSON syntax"})
 	default:
 		fmt.Println("error:", err)
-		return c.Status(500).JSON(fiber.Map{"error": "Something went wrong, please try again later."})
+		return c.Status(fiber.StatusInternalServerError).JSON(
+			fiber.Map{"error": "Something went wrong, please try again later."},
+		)
 	}
 }
 
 type CreateTodoRes struct {
-	InsertedId primitive.ObjectID `json:"inserted_id" bson:"_id"`
+	TodoId string `json:"todo_id"`
 }
 
 type UpdateOrDeleteTodoRes struct {
-	Message string `json:"message" bson:"message"`
+	Message string `json:"message"`
 }
