@@ -52,8 +52,8 @@ func StartMongoDB() error {
 	return nil
 }
 
-func CloseMongoDB() {
-	err := mongoClient.Disconnect(context.Background())
+func CloseMongoDB(ctx context.Context) {
+	err := mongoClient.Disconnect(ctx)
 	if err != nil {
 		panic(err)
 	}
