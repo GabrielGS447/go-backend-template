@@ -8,7 +8,6 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
 func Setup() (*echo.Echo, error) {
@@ -47,9 +46,6 @@ func createServer() *echo.Echo {
 	}))
 
 	router.AttachRoutes(server)
-
-	// attach swagger
-	server.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	return server
 }
