@@ -8,7 +8,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
-	"github.com/gofiber/swagger"
 	"github.com/joho/godotenv"
 )
 
@@ -48,9 +47,6 @@ func createServer() *fiber.App {
 	}))
 
 	router.AttachRoutes(server)
-
-	// attach swagger
-	server.Get("/swagger/*", swagger.HandlerDefault)
 
 	return server
 }
