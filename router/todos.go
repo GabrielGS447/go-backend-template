@@ -13,7 +13,7 @@ func attachTodosRoutes(server *echo.Echo) {
 	todos.POST("", todosHandler.CreateTodo)
 	todos.GET("", todosHandler.GetAllTodos)
 	todos.GET("/:id", todosHandler.GetTodoById)
-	todos.PUT("/:id", todosHandler.UpdateTodo)
+	todos.PATCH("/:id", todosHandler.UpdateTodo)
 	todos.DELETE("/:id", todosHandler.DeleteTodo)
 }
 
