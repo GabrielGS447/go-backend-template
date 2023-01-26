@@ -20,8 +20,8 @@ type CreateTodoDTO struct {
 }
 
 type UpdateTodoDTO struct {
-	Title       string `json:"title" bson:"title" validate:"required,min=5,max=50"`
-	Completed   *bool  `json:"completed" bson:"completed" validate:"required"`
-	Description string `json:"description" bson:"description" validate:"required,min=5,max=50"`
-	Date        string `json:"date" bson:"date" validate:"required,date"`
+	Title       string `json:"title" bson:"title,omitempty" validate:"omitempty,min=5,max=50"`
+	Completed   *bool  `json:"completed" bson:"completed,omitempty" validate:"omitempty"`
+	Description string `json:"description" bson:"description,omitempty" validate:"omitempty,min=5,max=50"`
+	Date        string `json:"date" bson:"date,omitempty" validate:"omitempty,date"`
 }

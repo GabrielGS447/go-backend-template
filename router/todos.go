@@ -13,7 +13,7 @@ func attachTodosRoutes(app *fiber.App) {
 	todos.Post("/", todosHandler.CreateTodo)
 	todos.Get("/", todosHandler.GetAllTodos)
 	todos.Get("/:id", todosHandler.GetTodoById)
-	todos.Put("/:id", todosHandler.UpdateTodo)
+	todos.Patch("/:id", todosHandler.UpdateTodo)
 	todos.Delete("/:id", todosHandler.DeleteTodo)
 }
 
