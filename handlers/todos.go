@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"encoding/json"
+	"errors"
 	"fmt"
 
 	_ "github.com/gabrielgs449/go-backend-template/docs"
@@ -148,11 +148,13 @@ func handleTodosErrors(c *fiber.Ctx, err error) error {
 		return c.Status(400).JSON(fiber.Map{"errors": valErrs})
 	}
 
-	switch err {
-	case errs.ErrTodoNotFound:
+	switch {
+	case errors.Is(err, errs.ErrTodoNotFound):
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
-	case err.(*json.SyntaxError):
+	case errors.As(err, &errs.ErrJsonSyntax):
 		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{"error": "Invalid JSON syntax"})
+	case errors.As(err, &errs.ErrUnmarshalType):
+		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{"error": "Invalid data type, please check your input"})
 	default:
 		fmt.Println("error:", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(
