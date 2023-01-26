@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -145,11 +145,13 @@ func handleTodosErrors(c echo.Context, err error) error {
 		return c.JSON(http.StatusBadRequest, echo.Map{"errors": valErrs})
 	}
 
-	switch err {
-	case errs.ErrTodoNotFound:
+	switch {
+	case errors.Is(err, errs.ErrTodoNotFound):
 		return c.JSON(http.StatusNotFound, echo.Map{"error": err.Error()})
-	case err.(*json.SyntaxError):
+	case errors.As(err, &errs.ErrJsonSyntax):
 		return c.JSON(http.StatusUnprocessableEntity, echo.Map{"error": "Invalid JSON syntax"})
+	case errors.As(err, &errs.ErrUnmarshalType):
+		return c.JSON(http.StatusUnprocessableEntity, echo.Map{"error": "Invalid data type, please check your input"})
 	default:
 		fmt.Println("error:", err)
 		return c.JSON(
